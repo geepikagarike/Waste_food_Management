@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Waste Connect - Waste food recycling Management</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      transition: background-image 1s ease-in-out;
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 50, 30, 0.6);
+      z-index: -1;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2f855a;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="tel"],
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(to right, #38a169, #2f855a);
+      color: white;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #2f855a, #276749);
+    }
+
+    .toggle-link, .forgot-password {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .toggle-link a, .forgot-password a {
+      color: #2f855a;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .quote-image {
+      text-align: center;
+      margin-bottom: 15px;
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .quote-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .quote-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .theme-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #f8d56b;
+    }
+
+    .app-screens {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+
+    .app-screens img {
+      width: 30%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .background-quote {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+      padding: 10px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 5px;
+      margin: 0 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="background-quote" id="background-quote">"Your apartment's waste could be someone's resource"</div>
+
+  <div class="container">
+    <!-- Motivational Image with Quote -->
+    <div class="quote-image">
+      <img id="theme-image" src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Daily Theme" />
+      <div class="quote-text">
+        <div class="theme-title" id="theme-title">Waste Management</div>
+        <div id="theme-text">PROPER SEGREGATION STARTS</div>
+        <div id="theme-text2">IN YOUR APARTMENT</div>
+      </div>
+    </div>
+
+    <!-- App Screenshots -->
+    <div class="app-screens">
+      <img src="https://via.placeholder.com/100x180/2f855a/ffffff?text=Waste+Tracker" alt="App Screen 1">
+      <img src="https://via.placeholder.com/100x180/38a169/ffffff?text=Collection" alt="App Screen 2">
+      <img src="https://via.placeholder.com/100x180/276749/ffffff?text=Compost" alt="App Screen 3">
+    </div>
+
+    <!-- Signup Form -->
+    <form id="signup-form">
+      <h2>Waste food recycling Management</h2>
+
+      <label for="signup-name">Society Name</label>
+      <input type="text" id="signup-name" name="name" placeholder="Enter your society name" required />
+
+      <label for="signup-role">Select Role</label>
+      <select id="signup-role" name="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="resident">Waste Giver (Hostel/User)</option>
+        <option value="manager">Collector (Farmer/Industry)</option>
+        <option value="collector">Others (like plastic)</option>
+      </select>
+
+      <label for="signup-mobile">Mobile Number</label>
+      <input type="tel" id="signup-mobile" name="mobile" placeholder="Enter mobile number" pattern="[0-9]{10}" maxlength="10" required />
+
+      <label for="signup-password">Password</label>
+      <input type="password" id="signup-password" name="password" placeholder="Create password" required minlength="6" />
+
+      <button type="submit">Register</button>
+
+      <div class="toggle-link">
+        Already registered? <a id="show-login">Sign In</a>
+      </div>
+    </form>
+
+    <!-- Login Form -->
+    <form id="login-form" class="hidden">
+      <h2>Society Login</h2>
+
+      <label for="login-mobile">Mobile Number</label>
+      <input type="tel" id="login-mobile" name="mobile" placeholder="Enter mobile number" pattern="[0-9]{10}" maxlength="10" required />
+
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" name="password" placeholder="Enter password" required minlength="6" />
+
+      <button type="submit">Sign In</button>
+
+      <div class="forgot-password">
+        <a href="#" id="forgot-password-link">Forgot Password?</a>
+      </div>
+
+      <div class="toggle-link">
+        New to WasteConnect? <a id="show-signup">Register</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Get current date and day
+    const date = new Date();
+    const day = date.getDay();
+    const month = date.getMonth() + 1;
+    const dateNum = date.getDate();
+
+    // Waste management quotes for apartments
+    const wasteQuotes = [
+      "Your apartment's waste could be someone's resource",
+      "Segregate today for a cleaner tomorrow",
+      "Don't throw, let it grow - compost your food waste",
+      "One society's trash is another's treasure",
+      "Waste less in your flat, the planet will thank you for that",
+      "Clean apartments start with proper waste disposal",
+      "Reduce, reuse, recycle - apartment edition"
+    ];
+
+    // Food waste specific quotes
+    const foodWasteQuotes = [
+      "Don't waste food - someone is hungry",
+      "Your leftover could be someone's meal",
+      "Plan meals to prevent food waste",
+      "Store food properly to avoid waste",
+      "Love food, hate waste - in your kitchen",
+      "Take what you'll eat, eat what you take",
+      "Compost food scraps, don't trash them"
+    ];
+
+    // Theme data for different days
+    const themes = {
+      daily: [
+        {
+          title: "Monday Waste Tip",
+          image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "START YOUR WEEK BY SEGREGATING",
+          text2: "YOUR APARTMENT'S WASTE"
+        },
+        {
+          title: "Tuesday Tip",
+          image: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "USE SEPARATE BINS FOR",
+          text2: "WET AND DRY WASTE"
+        },
+        {
+          title: "Waste-Free Wednesday",
+          image: "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "DONATE EXCESS FOOD",
+          text2: "BEFORE IT GOES TO WASTE"
+        },
+        {
+          title: "Thursday Thought",
+          image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "COMPOST FOOD SCRAPS",
+          text2: "FOR YOUR SOCIETY GARDEN"
+        },
+        {
+          title: "Friday Facts",
+          image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "RECYCLE PAPER AND PLASTIC",
+          text2: "TO REDUCE LANDFILL WASTE"
+        },
+        {
+          title: "Sustainable Saturday",
+          image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "ORGANIZE A SOCIETY",
+          text2: "CLEANUP DRIVE"
+        },
+        {
+          title: "Sharing Sunday",
+          image: "https://images.unsplash.com/photo-1600566752227-513c65f57b2b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "SHARE EXCESS FOOD",
+          text2: "WITH NEEDY NEIGHBORS"
+        }
+      ],
+      festivals: {
+        "4-22": { // Earth Day
+          title: "Earth Day Special",
+          image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "MAKE YOUR APARTMENT",
+          text2: "EARTH-FRIENDLY TODAY"
+        },
+        "6-5": { // World Environment Day
+          title: "Environment Day",
+          image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "GO GREEN IN YOUR",
+          text2: "RESIDENTIAL SOCIETY"
+        },
+        "10-16": { // World Food Day
+          title: "Food Day Reminder",
+          image: "https://images.unsplash.com/photo-1542826438-bd32f43d626f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+          text: "DON'T WASTE FOOD",
+          text2: "IN YOUR APARTMENT"
+        }
+      }
+    };
+
+    // Check if today is a special day
+    const todayKey = `${month}-${dateNum}`;
+    const currentTheme = themes.festivals[todayKey] || themes.daily[day];
+
+    // Set the theme for today
+    document.getElementById('theme-title').textContent = currentTheme.title;
+    document.getElementById('theme-text').textContent = currentTheme.text;
+    document.getElementById('theme-text2').textContent = currentTheme.text2;
+    document.getElementById('theme-image').src = currentTheme.image;
+    document.body.style.backgroundImage = `url('${currentTheme.image}')`;
+
+    // Set random waste quote in background
+    const allQuotes = [...wasteQuotes, ...foodWasteQuotes];
+    document.getElementById('background-quote').textContent = 
+      `"${allQuotes[Math.floor(Math.random() * allQuotes.length)]}"`;
+
+    // Rotate background quotes every 30 seconds
+    setInterval(() => {
+      document.getElementById('background-quote').textContent = 
+        `"${allQuotes[Math.floor(Math.random() * allQuotes.length)]}"`;
+    }, 30000);
+
+    // Toggle between signup and login forms
+    const signupForm = document.getElementById('signup-form');
+    const loginForm = document.getElementById('login-form');
+    const showLoginLink = document.getElementById('show-login');
+    const showSignupLink = document.getElementById('show-signup');
+
+    showLoginLink.addEventListener('click', () => {
+      signupForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+    });
+
+    showSignupLink.addEventListener('click', () => {
+      loginForm.classList.add('hidden');
+      signupForm.classList.remove('hidden');
+    });
+
+    // Submission handlers
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Registration submitted! Your society will be set up for waste management.');
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Login successful! Access your society waste management dashboard.');
+    });
+
+    document.getElementById('forgot-password-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Password reset instructions will be sent to your registered mobile.');
+    });
+  </script>
+</body>
+</html>

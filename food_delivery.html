@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waste Connect - Food Waste Management</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(to right, #38a169, #2f855a);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .dashboard {
+      display: flex;
+      margin-top: 30px;
+      gap: 20px;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .profile {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border: 3px solid #2f855a;
+    }
+
+    .profile h3 {
+      margin-bottom: 5px;
+      color: #2f855a;
+    }
+
+    .profile p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-menu li {
+      margin-bottom: 10px;
+    }
+
+    .nav-menu a {
+      display: block;
+      padding: 10px;
+      color: #555;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+
+    .nav-menu a:hover, .nav-menu a.active {
+      background-color: #e6ffed;
+      color: #2f855a;
+      font-weight: 600;
+    }
+
+    .nav-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .main-content {
+      flex: 1;
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #2f855a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #38a169, #2f855a);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-help {
+      background: linear-gradient(to right, #3182ce, #2c5282);
+    }
+
+    .btn-help:hover {
+      background: linear-gradient(to right, #2c5282, #1e3a8a);
+    }
+
+    .btn-delivery {
+      background: linear-gradient(to right, #805ad5, #6b46c1);
+    }
+
+    .btn-delivery:hover {
+      background: linear-gradient(to right, #6b46c1, #553c9a);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #2f855a, #276749);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .waste-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .waste-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+      border: 1px solid #e2e8f0;
+    }
+
+    .waste-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .waste-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .waste-details {
+      padding: 15px;
+    }
+
+    .waste-title {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #2d3748;
+    }
+
+    .waste-source {
+      font-size: 14px;
+      color: #4a5568;
+      margin-bottom: 10px;
+    }
+
+    .waste-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #718096;
+      margin-bottom: 15px;
+    }
+
+    .waste-quantity, .waste-time {
+      display: flex;
+      align-items: center;
+    }
+
+    .waste-quantity i, .waste-time i {
+      margin-right: 5px;
+    }
+
+    .waste-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+    }
+
+    .status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-available {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .status-pending {
+      background: #feebc8;
+      color: #7b341e;
+    }
+
+    .status-collected {
+      background: #bee3f8;
+      color: #2c5282;
+    }
+
+    .status-expired {
+      background: #fed7d7;
+      color: #9b2c2c;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-select {
+      padding: 8px 15px;
+      border-radius: 5px;
+      border: 1px solid #e2e8f0;
+      background: white;
+    }
+
+    .search-bar {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 8px 15px 8px 35px;
+      border-radius: 5px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .search-bar i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #718096;
+    }
+
+    .add-waste-form {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+    }
+
+    .form-group textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .map-container {
+      height: 300px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .capacity-badge {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .shelf-life {
+      background: #ebf8ff;
+      color: #2b6cb0;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #e53e3e;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .notification-item {
+      padding: 10px;
+      border-bottom: 1px solid #e2e8f0;
+      cursor: pointer;
+    }
+
+    .notification-item:hover {
+      background-color: #f7fafc;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: #718096;
+    }
+
+    .delivery-options {
+      margin-top: 15px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 15px;
+    }
+
+    .delivery-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .delivery-option input {
+      margin-right: 10px;
+    }
+
+    .delivery-option label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .delivery-option i {
+      margin-right: 8px;
+      color: #4a5568;
+    }
+
+    .packaging-badge {
+      background: #e9d8fd;
+      color: #553c9a;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+
+      .waste-list {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .waste-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Waste Connect - Food Waste Portal</h1>
+      <p class="subtitle">Track, manage and redirect food waste to sustainable solutions</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="dashboard">
+      <div class="sidebar">
+        <div class="profile">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-img">
+          <h3>John Doe</h3>
+          <p>Food Donor</p>
+        </div>
+        <ul class="nav-menu">
+          <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fas fa-trash-alt"></i> My Waste</a></li>
+          <li>
+            <a href="#" id="notificationsLink">
+              <i class="fas fa-bell"></i> Notifications
+              <span class="notification-badge" id="notificationCount">3</span>
+            </a>
+          </li>
+          <li><a href="#"><i class="fas fa-industry"></i> Processors</a></li>
+          <li><a href="#"><i class="fas fa-chart-line"></i> Analytics</a></li>
+          <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="main-content">
+        <div class="section-title">
+          <h2>Available Food Waste Materials</h2>
+          <button class="btn" id="addWasteBtn"><i class="fas fa-plus"></i> Add Waste</button>
+        </div>
+
+        <div class="filter-bar">
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search food waste...">
+          </div>
+          <select class="filter-select">
+            <option>All Food Types</option>
+            <option>Fruits & Vegetables</option>
+            <option>Dairy & Eggs</option>
+            <option>Bread & Bakery</option>
+            <option>Cooked Food</option>
+            <option>Meat & Fish</option>
+            <option>Other</option>
+          </select>
+          <select class="filter-select">
+            <option>All Processors</option>
+            <option>Farmers (Compost)</option>
+            <option>Biogas Plants</option>
+            <option>Animal Feed</option>
+            <option>Food Banks</option>
+          </select>
+        </div>
+
+        <div class="waste-list">
+          <!-- Waste Card 1 - Vegetable Waste -->
+          <div class="waste-card">
+            <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Vegetable Waste" class="waste-img">
+            <div class="waste-details">
+              <h3 class="waste-title">Vegetable Peels & Scraps</h3>
+              <p class="waste-source">City Market</p>
+              <div class="waste-meta">
+                <span class="waste-quantity"><i class="fas fa-weight-hanging"></i> 2.5 tons/day</span>
+                <span class="waste-time"><i class="far fa-clock"></i> Daily</span>
+              </div>
+              <div>
+                <span class="shelf-life"><i class="fas fa-hourglass-half"></i> Shelf life: 2-3 days</span>
+                <span class="shelf-life"><i class="far fa-calendar-alt"></i> Expires: Jun 8, 2023</span>
+              </div>
+              <div class="waste-actions">
+                <span class="status status-available">Available</span>
+                <button class="btn btn-help" data-food="Vegetable Peels & Scraps"><i class="fas fa-truck"></i> Collect</button>
+              </div>
+              <div style="margin-top: 10px;">
+                <span class="capacity-badge">Farmers: Can accept 1.5 tons/day</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Waste Card 2 - Leftover Cooked Food -->
+          <div class="waste-card">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cooked Food" class="waste-img">
+            <div class="waste-details">
+              <h3 class="waste-title">Leftover Cooked Food</h3>
+              <p class="waste-source">Grand Hotel</p>
+              <div class="waste-meta">
+                <span class="waste-quantity"><i class="fas fa-weight-hanging"></i> 800 kg/day</span>
+                <span class="waste-time"><i class="far fa-clock"></i> Daily</span>
+              </div>
+              <div>
+                <span class="shelf-life"><i class="fas fa-hourglass-half"></i> Shelf life: 1-2 days</span>
+                <span class="shelf-life"><i class="far fa-calendar-alt"></i> Expires: Jun 7, 2023</span>
+              </div>
+              <div class="waste-actions">
+                <span class="status status-pending">Processing</span>
+                <button class="btn btn-secondary">Details</button>
+              </div>
+              <div style="margin-top: 10px;">
+                <span class="capacity-badge">Biogas Plant: Can accept 2 tons/day</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Waste Card 3 - Expired Dairy with Packaging -->
+          <div class="waste-card">
+            <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Dairy Waste" class="waste-img">
+            <div class="waste-details">
+              <h3 class="waste-title">Expired Dairy Products with Packaging</h3>
+              <p class="waste-source">Local Supermarket</p>
+              <div class="waste-meta">
+                <span class="waste-quantity"><i class="fas fa-weight-hanging"></i> 300 kg/week</span>
+                <span class="waste-time"><i class="far fa-clock"></i> Weekly</span>
+              </div>
+              <div>
+                <span class="shelf-life"><i class="fas fa-hourglass-half"></i> Shelf life: 7-14 days</span>
+                <span class="shelf-life"><i class="far fa-calendar-alt"></i> Expired: Jun 1, 2023</span>
+              </div>
+              <div>
+                <span class="packaging-badge"><i class="fas fa-box"></i> Includes: Plastic containers</span>
+                <span class="packaging-badge"><i class="fas fa-box"></i> Includes: Paper packaging</span>
+              </div>
+              <div class="waste-actions">
+                <span class="status status-expired">Expired</span>
+                <button class="btn btn-help" data-food="Expired Dairy Products with Packaging"><i class="fas fa-truck"></i> Collect</button>
+              </div>
+              <div style="margin-top: 10px;">
+                <span class="capacity-badge">Biogas: Can accept 500 kg/week</span>
+                <span class="capacity-badge">Recycling: Can process packaging</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Waste Form (Hidden by default) -->
+        <div id="addWasteForm" class="add-waste-form hidden">
+          <h2 class="section-title">Add Food Waste</h2>
+          <form id="wasteForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="waste-name">Food Waste Name</label>
+                <input type="text" id="waste-name" placeholder="e.g. Banana Peels, Expired Milk" required>
+              </div>
+              <div class="form-group">
+                <label for="waste-type">Food Category</label>
+                <select id="waste-type" required>
+                  <option value="">Select category</option>
+                  <option>Fruits & Vegetables</option>
+                  <option>Dairy & Eggs</option>
+                  <option>Bread & Bakery</option>
+                  <option>Cooked Food</option>
+                  <option>Meat & Fish</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="quantity">Quantity (kg/tons)</label>
+                <input type="text" id="quantity" placeholder="Estimated quantity" required>
+              </div>
+              <div class="form-group">
+                <label for="frequency">Collection Frequency</label>
+                <select id="frequency" required>
+                  <option value="">Select frequency</option>
+                  <option>Daily</option>
+                  <option>Weekly</option>
+                  <option>Monthly</option>
+                  <option>One-time</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="purchase-date">Purchase Date</label>
+                <input type="date" id="purchase-date" required>
+              </div>
+              <div class="form-group">
+                <label for="expiry-date">Expiry Date</label>
+                <input type="date" id="expiry-date" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea id="description" placeholder="Details about the food waste, storage conditions, and any special handling requirements" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="packaging">Packaging Materials (if any)</label>
+              <select id="packaging" multiple>
+                <option>Plastic containers</option>
+                <option>Glass jars</option>
+                <option>Metal cans</option>
+                <option>Paper packaging</option>
+                <option>Cardboard boxes</option>
+                <option>No packaging</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="processor-type">Preferred Processor Type</label>
+              <select id="processor-type" multiple required>
+                <option>Farmers (Compost)</option>
+                <option>Biogas Plants</option>
+                <option>Animal Feed</option>
+                <option>Food Banks</option>
+                <option>Any</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="location">Pickup Location</label>
+              <input type="text" id="location" placeholder="Enter pickup address" required>
+            </div>
+
+            <div class="map-container">
+              <!-- Map would be integrated here -->
+              <p style="text-align: center; padding-top: 140px;">Map would display here</p>
+            </div>
+
+            <div class="form-group">
+              <label for="image">Upload Image</label>
+              <input type="file" id="image" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn"><i class="fas fa-upload"></i> Submit Waste</button>
+          </form>
+        </div>
+
+        <!-- Notifications Panel (Hidden by default) -->
+        <div id="notificationsPanel" class="add-waste-form hidden">
+          <h2 class="section-title">Notifications</h2>
+          <div id="notificationsList">
+            <div class="notification-item">
+              <p><strong>New food waste available:</strong> Vegetable Peels & Scraps from City Market</p>
+              <p class="notification-time">10 minutes ago</p>
+            </div>
+            <div class="notification-item">
+              <p><strong>Your food waste has been collected:</strong> Expired Dairy Products</p>
+              <p class="notification-time">2 hours ago</p>
+            </div>
+            <div class="notification-item">
+              <p><strong>New processor available:</strong> Green Compost Farm can now accept more waste</p>
+              <p class="notification-time">1 day ago</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Options Modal (Hidden by default) -->
+        <div id="deliveryModal" class="add-waste-form hidden">
+          <h2 class="section-title">Collection Options</h2>
+          <div id="selectedFoodInfo"></div>
+          
+          <div class="delivery-options">
+            <h3>Choose how to collect:</h3>
+            
+            <div class="delivery-option">
+              <input type="radio" id="deliveryOption1" name="deliveryOption" value="delivery" checked>
+              <label for="deliveryOption1">
+                <i class="fas fa-truck"></i> Schedule a delivery pickup
+                <p style="font-size: 12px; color: #718096; margin-left: 28px; margin-top: 5px;">
+                  Our delivery partner will collect the food waste within 24 hours
+                </p>
+              </label>
+            </div>
+            
+            <div class="delivery-option">
+              <input type="radio" id="deliveryOption2" name="deliveryOption" value="self">
+              <label for="deliveryOption2">
+                <i class="fas fa-car"></i> Self pickup
+                <p style="font-size: 12px; color: #718096; margin-left: 28px; margin-top: 5px;">
+                  You will arrange your own transportation for the food waste
+                </p>
+              </label>
+            </div>
+            
+            <div id="deliveryDetails" style="margin-top: 15px;">
+              <div class="form-group">
+                <label for="deliveryDate">Preferred Collection Date</label>
+                <input type="date" id="deliveryDate" required>
+              </div>
+              <div class="form-group">
+                <label for="deliveryTime">Preferred Time Window</label>
+                <select id="deliveryTime" required>
+                  <option value="">Select time window</option>
+                  <option>Morning (8am-12pm)</option>
+                  <option>Afternoon (12pm-4pm)</option>
+                  <option>Evening (4pm-8pm)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="specialInstructions">Special Instructions</label>
+                <textarea id="specialInstructions" placeholder="Any special handling requirements or access instructions"></textarea>
+              </div>
+            </div>
+            
+            <button id="confirmCollectionBtn" class="btn btn-delivery"><i class="fas fa-check-circle"></i> Confirm Collection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const addWasteBtn = document.getElementById('addWasteBtn');
+    const addWasteForm = document.getElementById('addWasteForm');
+    const wasteForm = document.getElementById('wasteForm');
+    const notificationsLink = document.getElementById('notificationsLink');
+    const notificationsPanel = document.getElementById('notificationsPanel');
+    const notificationCount = document.getElementById('notificationCount');
+    const deliveryModal = document.getElementById('deliveryModal');
+    const selectedFoodInfo = document.getElementById('selectedFoodInfo');
+    const confirmCollectionBtn = document.getElementById('confirmCollectionBtn');
+    const deliveryOptions = document.getElementsByName('deliveryOption');
+    const deliveryDetails = document.getElementById('deliveryDetails');
+    const helpButtons = document.querySelectorAll('.btn-help');
+
+    // Toggle Add Waste Form
+    addWasteBtn.addEventListener('click', function() {
+      addWasteForm.classList.toggle('hidden');
+      notificationsPanel.classList.add('hidden');
+      deliveryModal.classList.add('hidden');
+      
+      if (!addWasteForm.classList.contains('hidden')) {
+        addWasteForm.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // Toggle Notifications Panel
+    notificationsLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      notificationsPanel.classList.toggle('hidden');
+      addWasteForm.classList.add('hidden');
+      deliveryModal.classList.add('hidden');
+      
+      if (!notificationsPanel.classList.contains('hidden')) {
+        notificationsPanel.scrollIntoView({ behavior: 'smooth' });
+        // Mark notifications as read
+        notificationCount.textContent = '0';
+        notificationCount.style.display = 'none';
+      }
+    });
+
+    // Handle waste form submission
+    wasteForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Food waste has been added successfully! Notifications will be sent to potential collectors.');
+      addWasteForm.classList.add('hidden');
+      wasteForm.reset();
+      
+      // Simulate sending notifications
+      setTimeout(() => {
+        const currentCount = parseInt(notificationCount.textContent);
+        notificationCount.textContent = currentCount + 1;
+        notificationCount.style.display = 'flex';
+      }, 2000);
+    });
+
+    // Handle help/collection buttons
+    helpButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const foodName = this.getAttribute('data-food');
+        
+        // Show delivery options modal
+        selectedFoodInfo.innerHTML = `
+          <h3>${foodName}</h3>
+          <p>Please select how you would like to collect this food waste:</p>
+        `;
+        
+        // Add special note for dairy with packaging
+        if (foodName.includes('Packaging')) {
+          selectedFoodInfo.innerHTML += `
+            <div class="packaging-badge" style="margin-top: 10px;">
+              <i class="fas fa-info-circle"></i> Note: This collection includes plastic and paper packaging materials
+            </div>
+          `;
+        }
+        
+        deliveryModal.classList.remove('hidden');
+        addWasteForm.classList.add('hidden');
+        notificationsPanel.classList.add('hidden');
+        deliveryModal.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Handle delivery option changes
+    deliveryOptions.forEach(option => {
+      option.addEventListener('change', function() {
+        if (this.value === 'self') {
+          deliveryDetails.innerHTML = `
+            <div class="form-group">
+              <label for="pickupDate">Preferred Pickup Date</label>
+              <input type="date" id="pickupDate" required>
+            </div>
+            <div class="form-group">
+              <label for="contactPerson">Contact Person</label>
+              <input type="text" id="contactPerson" placeholder="Name of person to contact" required>
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Contact Phone</label>
+              <input type="tel" id="contactPhone" placeholder="Phone number for pickup" required>
+            </div>
+          `;
+        } else {
+          deliveryDetails.innerHTML = `
+            <div class="form-group">
+              <label for="deliveryDate">Preferred Collection Date</label>
+              <input type="date" id="deliveryDate" required>
+            </div>
+            <div class="form-group">
+              <label for="deliveryTime">Preferred Time Window</label>
+              <select id="deliveryTime" required>
+                <option value="">Select time window</option>
+                <option>Morning (8am-12pm)</option>
+                <option>Afternoon (12pm-4pm)</option>
+                <option>Evening (4pm-8pm)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="specialInstructions">Special Instructions</label>
+              <textarea id="specialInstructions" placeholder="Any special handling requirements or access instructions"></textarea>
+            </div>
+          `;
+        }
+      });
+    });
+
+    // Confirm collection
+    confirmCollectionBtn.addEventListener('click', function() {
+      const selectedOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+      
+      if (selectedOption === 'delivery') {
+        alert('Delivery has been scheduled! Our team will contact you to confirm the pickup details.');
+      } else {
+        alert('Self pickup has been arranged! Please bring your ID when collecting the food waste.');
+      }
+      
+      deliveryModal.classList.add('hidden');
+      
+      // Simulate sending notification to donor
+      setTimeout(() => {
+        const currentCount = parseInt(notificationCount.textContent);
+        notificationCount.textContent = currentCount + 1;
+        notificationCount.style.display = 'flex';
+      }, 2000);
+    });
+
+    // Set default dates for the forms
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date().toISOString().split('T')[0];
+      const nextWeek = new Date();
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      const nextWeekFormatted = nextWeek.toISOString().split('T')[0];
+      
+      document.getElementById('purchase-date').value = today;
+      document.getElementById('expiry-date').value = nextWeekFormatted;
+      
+      // Set default delivery/pickup date to tomorrow
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+      
+      if (document.getElementById('deliveryDate')) {
+        document.getElementById('deliveryDate').value = tomorrowFormatted;
+      }
+      if (document.getElementById('pickupDate')) {
+        document.getElementById('pickupDate').value = tomorrowFormatted;
+      }
+    });
+
+    // Simulate receiving a new notification
+    setTimeout(() => {
+      const currentCount = parseInt(notificationCount.textContent);
+      notificationCount.textContent = currentCount + 1;
+      notificationCount.style.display = 'flex';
+      
+      // Add to notifications list
+      const notificationsList = document.getElementById('notificationsList');
+      const newNotification = document.createElement('div');
+      newNotification.className = 'notification-item';
+      newNotification.innerHTML = `
+        <p><strong>New food waste available:</strong> Bread & Pastries from Sunshine Bakery</p>
+        <p class="notification-time">Just now</p>
+      `;
+      notificationsList.insertBefore(newNotification, notificationsList.firstChild);
+    }, 5000);
+  </script>
+</body>
+</html>
